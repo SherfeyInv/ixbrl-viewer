@@ -37,7 +37,7 @@
     "decimal.js": "^10.3.1",
     "dateformat": "^5.0.3",
     "i18next": "^20.3.2",
-    "interactjs": "^1.8.5",
+    "interactjs": "^1.10.27",
     "jquery": "^3.4.1",
     "jquery-i18next": "^1.2.1",
     "less": "^3.11.1",
