@@ -1,14 +1,15 @@
 {
   "calculation": {
     "calculated-total": "Calculated",
-    "calculations11": "Calculations v1.1",
     "concept": "Concept",
     "consistent-duplicate-facts-present": "{{nfacts}} consistent duplicate facts present",
+    "does-not-bind": "Calculation does not bind",
     "inconsistent-duplicate-facts-present": "{{nfacts}} inconsistent duplicate facts present",
     "maximum": "Maximum",
     "mininum": "Minimum",
     "reported-total": "Reported",
-    "reported-value": "Reported value"
+    "reported-value": "Reported value",
+    "useCalculations11": "Use Calculations v1.1"
   },
   "common": {
     "accuracyInfinite": "Infinite precision",
@@ -45,13 +46,15 @@
   "inspector": {
     "anchoring": "Anchoring",
     "associatedFacts": "Associated facts",
-    "calculationDetails": "",
+    "calculationDetails": "Calculation details",
     "calculations": "Calculations",
     "concealedFact": "Concealed fact",
     "conceptType": "Concept Type",
     "contributor": "Contributor",
+    "dimensions": "Dimension Type",
     "documentOutline": "Document outline",
     "documentSummary": "Document summary",
+    "explicitDimension": "Explicit Dimensions",
     "fact-groups": "Sections",
     "factProperties": "Fact Properties",
     "factSearch": "Fact Search",
@@ -95,7 +98,8 @@
         "other": "Other Linkbases",
         "presentation": "Presentation Linkbases",
         "references": "Reference Linkbases",
-        "schemas": "Schemas"
+        "schemas": "Schemas",
+        "reportCreation": "Report Creation"
       },
       "tag": {
         "colDimensions": "Dimensions",
@@ -108,7 +112,9 @@
       }
     },
     "summation": "Summation",
+    "targetDocument": "Target Document",
     "textOption": "Text",
+    "typedDimensions": "Typed Dimensions",
     "units": "Units",
     "validationCode": "Code",
     "validationMessage": "Message",
@@ -134,6 +140,7 @@
   },
   "search": {
     "concealedFact": "Concealed fact",
+    "default": "default",
     "hiddenFact": "Hidden fact",
     "noMatchFound": "No match found",
     "selected": "selected",

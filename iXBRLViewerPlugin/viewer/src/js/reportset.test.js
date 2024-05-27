@@ -73,7 +73,10 @@ function multiReportTestData(withAnchoring) {
                         "facts": {
                             ...createNumericFact("f1", "eg:Concept1", "iso2417:USD", "2018-01-01/2019-01-01", 1000, -3),
                             ...createNumericFact("f2", "eg:Concept2", "iso2417:USD", "2018-01-01/2019-01-01", 1000, -3),
-                        }
+                        },
+
+
+                        "softwareCredits": ["Example credit text C", "Example credit text B"],
                     },
                 ]
             },
@@ -112,7 +115,9 @@ function multiReportTestData(withAnchoring) {
 
                         "rels": {
                           ...anchoringRelationShips(withAnchoring)
-                        }
+                        },
+
+                        "softwareCredits": ["Example credit text A"],
                     }
                 ]
             }
@@ -165,7 +170,9 @@ function singleReportTestData() {
         "facts": {
             ...createNumericFact("f1", "eg:Concept1", "iso2417:USD", "2018-01-01/2019-01-01", 1000, -3),
             ...createNumericFact("f2", "eg:Concept2", "iso2417:USD", "2018-01-01/2019-01-01", 1000, -3),
-        }
+        },
+
+        "softwareCredits": ["Example credit text"],
     };
 }
 
@@ -184,14 +191,6 @@ describe("Multi report - Language options", () => {
         const al = testReportSet.availableLanguages();
         expect(al).toHaveLength(3);
         expect(al).toEqual(expect.arrayContaining(["en", "en-us", "en-gb"]));
-    });
-
-    test("Names for languages", () => {
-        const ln = testReportSet.languageNames();
-        expect(Object.keys(ln)).toHaveLength(3);
-        expect(ln['en']).toBe("English");
-        expect(ln['en-us']).toBe("English (US)");
-        expect(ln['fr']).toBe("French");
     });
 });
 
@@ -294,14 +293,6 @@ describe("Single report - Language options", () => {
         expect(al).toHaveLength(2);
         expect(al).toEqual(expect.arrayContaining(["en", "en-us"]));
     });
-
-    test("Names for languages", () => {
-        const ln = testReportSet.languageNames();
-        expect(Object.keys(ln)).toHaveLength(3);
-        expect(ln['en']).toBe("English");
-        expect(ln['en-us']).toBe("English (US)");
-        expect(ln['fr']).toBe("French");
-    });
 });
 
 describe("Single report - Fetching facts", () => {
@@ -343,5 +334,24 @@ describe("ELR labels", () => {
 
     test("Present", () => {
         expect(testReportSet.reports[0].getRoleLabel("role1")).toBe("Role 1 Label");
+    });
+});
+
+describe("Fetching software credit", () => {
+
+    test("Single", () => {
+        const testReportSet = new ReportSet(singleReportTestData());
+        testReportSet._initialize();
+
+        const softwareCredits = testReportSet.getSoftwareCredits();
+        expect(softwareCredits).toEqual(["Example credit text"]);
+    });
+
+    test("Multiple", () => {
+        const testReportSet = new ReportSet(multiReportTestData(true));
+        testReportSet._initialize();
+
+        const softwareCredits = testReportSet.getSoftwareCredits();
+        expect(softwareCredits).toEqual(["Example credit text A", "Example credit text B", "Example credit text C"]);
     });
 });

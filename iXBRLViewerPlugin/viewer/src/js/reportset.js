@@ -7,7 +7,6 @@ import { Unit } from "./unit";
 import { titleCase, viewerUniqueId } from "./util.js";
 import { QName } from "./qname.js";
 import { ViewerOptions } from './viewerOptions.js';
-import $ from 'jquery'
 
 
 // Class represents the set of XBRL "target" reports shown in the viewer.
@@ -119,6 +118,23 @@ export class ReportSet {
     }
 
     /**
+     * @return {Array[String]} Sorted list of unique software credit text values
+     */
+    getSoftwareCredits() {
+        let softwareCredits = new Set(this.reports.flatMap(r => r.softwareCredits()));
+        return Array.from(softwareCredits).sort();
+    }
+
+    getTargetDocuments() {
+        if (this._targetDocuments === undefined) {
+            this._targetDocuments = new Set(Object.values(this._items)
+                    .filter(f => f instanceof Fact)
+                    .map(f => f.targetDocument()));
+        }
+        return this._targetDocuments;
+    }
+
+    /**
      * Returns a set of OIM format unit strings used by facts on this report. Lazy-loaded.
      * @return {Set[String]} Set of OIM format unit strings
      */
@@ -167,10 +183,6 @@ export class ReportSet {
                 }
             });
         return usedScalesMap;
-    }
-
-    languageNames() {
-        return this._data.languages;
     }
 
     roleMap() {
