@@ -31,9 +31,6 @@
   },
   "author": "",
   "dependencies": {
-    "chart.js": "^4.4.2",
-    "core-js": "^3.37.0",
-    "css-loader": "^7.1.1",
     "dateformat": "^5.0.3",
     "jquery-i18next": "^1.2.1",
     "less": "^4.2.0",
