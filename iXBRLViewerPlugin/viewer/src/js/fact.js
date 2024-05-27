@@ -2,8 +2,6 @@
 
 import $ from 'jquery'
 import i18next from "i18next";
-import { isodateToHuman } from "./util.js"
-import { QName } from "./qname.js"
 import { Aspect } from "./aspect.js";
 import { Period } from './period.js';
 import { formatNumber, localId } from "./util.js";
@@ -90,7 +88,7 @@ export class Fact {
         else if (this.isNil()) {
             v = "nil";
         }
-        else if (this.escaped()) {
+        else if (this.isTextBlock()) {
             const html = $("<div>").append($($.parseHTML(v, null, false)));
             /* Insert an extra space at the beginning and end of block elements to
              * preserve separation of sections of text. */
@@ -403,5 +401,9 @@ export class Fact {
             return true;
         }
         return this.decimals() > of.decimals();
+    }
+
+    targetDocument() {
+        return this.report.targetDocument();
     }
 }

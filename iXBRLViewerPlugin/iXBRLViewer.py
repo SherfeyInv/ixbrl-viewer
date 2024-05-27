@@ -14,7 +14,6 @@ from collections import defaultdict
 from copy import deepcopy
 from pathlib import Path
 
-import pycountry
 from arelle import XbrlConst
 from arelle.ModelDocument import Type
 from arelle.ModelRelationshipSet import ModelRelationshipSet
@@ -92,7 +91,6 @@ class IXBRLViewerBuilder:
         self.taxonomyData = {
             "sourceReports": [],
             "features": [],
-            "languages": {},
         }
         self.basenameSuffix = basenameSuffix
         self.currentTargetReport = None
@@ -132,23 +130,6 @@ class IXBRLViewerBuilder:
         """
         return s.replace("<","\\u003C").replace(">","\\u003E").replace("&","\\u0026")
 
-    def makeLanguageName(self, langCode):
-        code = re.sub("-.*","",langCode)
-        try:
-            language = pycountry.languages.lookup(code)
-            match = re.match(r'^[^-]+-(.*)$',langCode)
-            name = language.name
-            if match is not None:
-                name = "%s (%s)" % (name, match.group(1).upper())
-        except LookupError:
-            name = langCode
-
-        return name
-
-    def addLanguage(self, langCode):
-        if langCode not in self.taxonomyData["languages"]:
-            self.taxonomyData["languages"][langCode] = self.makeLanguageName(langCode)
-
     def addELR(self, report: ModelXbrl, elr):
         prefix = self.roleMap.getPrefix(elr)
         if self.currentTargetReport.setdefault("roleDefs",{}).get(prefix, None) is None:
@@ -170,7 +151,6 @@ class IXBRLViewerBuilder:
             for lr in labels:
                 l = lr.toModelObject
                 conceptData["labels"].setdefault(self.roleMap.getPrefix(l.role),{})[l.xmlLang.lower()] = l.text;
-                self.addLanguage(l.xmlLang.lower());
 
             refData = []
             for _refRel in concept.modelXbrl.relationshipSet(XbrlConst.conceptReference).fromModelObject(concept):
@@ -381,10 +361,11 @@ class IXBRLViewerBuilder:
         with open(os.path.join(os.path.dirname(__file__),"stubviewer.html")) as fin:
             return etree.parse(fin)
 
-    def newTargetReport(self):
+    def newTargetReport(self, target):
         return {
             "concepts": {},
             "facts": {},
+            "target": target,
         }
 
     def addSourceReport(self):
@@ -425,7 +406,15 @@ class IXBRLViewerBuilder:
 
         for n, report in enumerate(self.reports):
             self.footnoteRelationshipSet = ModelRelationshipSet(report, "XBRL-footnotes")
-            self.currentTargetReport = self.newTargetReport()
+            self.currentTargetReport = self.newTargetReport(getattr(report, "ixdsTarget", None))
+            softwareCredits = set()
+            for document in report.urlDocs.values():
+                if document.type not in (Type.INLINEXBRL, Type.INLINEXBRLDOCUMENTSET):
+                    continue
+                matches = document.creationSoftwareMatches(document.creationSoftwareComment)
+                softwareCredits.update(matches)
+            if softwareCredits:
+                self.currentTargetReport["softwareCredits"] = list(softwareCredits)
             for f in report.facts:
                 self.addFact(report, f)
             self.currentTargetReport["rels"] = self.getRelationships(report)
