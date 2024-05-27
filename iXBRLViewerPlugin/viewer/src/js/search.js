@@ -1,8 +1,6 @@
 // See COPYRIGHT.md for copyright information
 
 import lunr from 'lunr'
-import $ from 'jquery'
-import Decimal from "decimal.js";
 
 export class ReportSearch {
     constructor(reportSet) {
@@ -154,6 +152,13 @@ export class ReportSearch {
         );
     }
 
+    targetDocumentFilter(s, item) {
+        return (
+            s.targetDocumentFilter.length === 0 ||
+            s.targetDocumentFilter.some(t => (item.targetDocument() ?? ':default') === t)
+        );
+    }
+
     search(s) {
         if (!this.ready) {
             return;
@@ -172,6 +177,7 @@ export class ReportSearch {
             this.namespacesFilter,
             this.unitsFilter,
             this.scalesFilter,
+            this.targetDocumentFilter
         ];
 
         rr.forEach((r,_) => {
