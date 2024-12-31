@@ -40,7 +40,7 @@
     "interactjs": "^1.10.27",
     "jquery": "^3.7.1",
     "jquery-i18next": "^1.2.1",
-    "less": "^4.2.0",
+    "less": "^4.2.1",
     "less-loader": "^12.2.0",
     "lunr": "^2.3.9",
     "moment": "^2.30.1",
